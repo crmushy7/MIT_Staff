@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -38,7 +39,7 @@ public class Dashboard extends AppCompatActivity {
     RecyclerView recyclerView;
     CoursesAdapter adapter;
     RelativeLayout uploadbtn;
-    AlertDialog new_course_dialog;
+    AlertDialog new_course_dialog,course_description_dialog;
 
     private List<CoursesSetGet> coursesSetGetList=new ArrayList<>();
 
@@ -65,7 +66,7 @@ public class Dashboard extends AppCompatActivity {
                     String courseDur=dataSnapshot.child("Course Duration").getValue(String.class);
                     String courseDes=dataSnapshot.child("Course Description").getValue(String.class);
                     String courseID=dataSnapshot.getKey().toString();
-                    CoursesSetGet coursesSetGet=new CoursesSetGet(courseNm+"",courseDur+"",courseID+"");
+                    CoursesSetGet coursesSetGet=new CoursesSetGet(courseNm+"",courseDur+"",courseID+"",courseDes+"");
                     coursesSetGetList.add(coursesSetGet);
 
                 }
@@ -142,7 +143,18 @@ public class Dashboard extends AppCompatActivity {
         adapter.setOnItemClickListener(new CoursesAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, CoursesSetGet itemSetGet) {
-
+                AlertDialog.Builder builder = new AlertDialog.Builder(Dashboard.this);
+                View popupView = LayoutInflater.from(Dashboard.this).inflate(R.layout.course_description, null);
+                builder.setView(popupView);
+                course_description_dialog = builder.create();
+                course_description_dialog.show();
+                Button upload=popupView.findViewById(R.id.button_request);
+                TextView courseName=popupView.findViewById(R.id.coursename);
+                TextView courseDuration=popupView.findViewById(R.id.courseduration);
+                TextView courseDescription=popupView.findViewById(R.id.coursedescription);
+                courseName.setText(itemSetGet.getCourseName());
+                courseDuration.setText("Duration: "+itemSetGet.getCourseDuration());
+                courseDescription.setText(itemSetGet.getCourseDescription());
             }
         });
     }
