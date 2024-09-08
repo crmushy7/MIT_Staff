@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/card_bg_withborder"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10sp"
+        android:layout_marginEnd="10sp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/profile_nametv"
+            android:textColor="@color/blue_mod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Course Name"
+            android:layout_marginTop="8sp"
+            android:textStyle="bold"
+            android:textSize="22sp"/>
+        <EditText
+            android:id="@+id/courseName"
+            android:layout_width="match_parent"
+            android:layout_height="65sp"
+            android:paddingLeft="10sp"
+            android:inputType="textShortMessage"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:background="@drawable/edit_text_upload"
+            android:hint="Enter course name"
+            android:layout_marginTop="8sp"/>
+        <TextView
+            android:id="@+id/profile_phonetv"
+            android:textColor="@color/blue_mod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Course Duration"
+            android:layout_marginTop="8sp"
+            android:textStyle="bold"
+            android:textSize="22sp"/>
+        <EditText
+            android:id="@+id/courseDuration"
+            android:layout_width="match_parent"
+            android:layout_height="65sp"
+            android:paddingLeft="10sp"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:background="@drawable/edit_text_upload"
+            android:hint="Enter course duration"
+            android:layout_marginTop="8sp"/>
+        <TextView
+            android:id="@+id/profile_passwordtv"
+            android:textColor="@color/blue_mod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Course Description"
+            android:layout_marginTop="8sp"
+            android:textStyle="bold"
+            android:textSize="22sp"/>
+        <EditText
+            android:id="@+id/courseDescription"
+            android:layout_width="match_parent"
+            android:layout_height="65sp"
+            android:paddingLeft="10sp"
+            android:inputType="textMultiLine"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:background="@drawable/edit_text_upload"
+            android:hint="Enter course description"
+            android:layout_marginTop="8sp"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_upload"
+            android:layout_width="match_parent"
+            android:layout_height="65sp"
+            android:layout_marginTop="20sp"
+            android:layout_marginBottom="20sp"
+            android:background="@drawable/round_button"
+            android:text="Upload"
+            android:textAllCaps="false"
+            android:textColor="@color/white_mod"
+            android:textStyle="bold"
+            android:textSize="25sp"/>
+    </LinearLayout>
+
+</RelativeLayout>
