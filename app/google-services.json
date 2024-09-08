@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "493274190908",
+    "project_id": "mit-app-45294",
+    "storage_bucket": "mit-app-45294.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493274190908:android:d48cbaa2659b18ad56df39",
+        "android_client_info": {
+          "package_name": "com.example.registrationapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDweMJlaRuqzxY8KadgAZAh8C3osnkFkCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
