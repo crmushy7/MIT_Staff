@@ -9,7 +9,8 @@
     <color name="green">#00FF00</color>
     <color name="green_mod">#0BAF4E</color>
     <color name="white_mod">#F5F5F5</color>
-    <color name="blue_mod">#008080</color>
+    <color name="blue_mod">#0066FF</color>
+<!--    <color name="blue_mod">#008080</color>-->
     <color name="whiteOrange">#FF9829</color>
     <color name="greywhite">#C5BEBE</color>
 </resources>

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                String password= passwordEditText.getText().toString().trim();
                String email= emailEditText.getText().toString().trim();
                if (email.isEmpty()){
-                   emailEditText.setError("Requyired!");
+                   emailEditText.setError("Required!");
                    emailEditText.requestFocus();
                }
                else if (password.isEmpty()){

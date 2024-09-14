@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,23 +37,40 @@ import java.util.List;
 
 import Adapters.CoursesAdapter;
 import Adapters.CoursesSetGet;
+import Adapters.RequestsAdapter;
+import Adapters.RequestsSetGet;
 
 public class Dashboard extends AppCompatActivity {
-    RecyclerView recyclerView;
+    RecyclerView recyclerView,request_recyclerview;
     CoursesAdapter adapter;
+    RequestsAdapter request_adapter;
     RelativeLayout uploadbtn;
     AlertDialog new_course_dialog,course_description_dialog;
+    LinearLayout homebutton,requestbutton,coursesRegistered,requestAvalable;
+    ProgressBar request_progressbar;
+    TextView no_request_text;
 
     private List<CoursesSetGet> coursesSetGetList=new ArrayList<>();
+    private List<RequestsSetGet> requestsSetGetList=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        request_progressbar=findViewById(R.id.request_progressbar);
+        no_request_text=findViewById(R.id.no_request_text);
+        request_recyclerview=findViewById(R.id.requests_recyclerview);
+        homebutton=findViewById(R.id.ll_homeBtn);
+        requestbutton=findViewById(R.id.ll_requestsBtn);
+        coursesRegistered=findViewById(R.id.courses_layout);
+        requestAvalable=findViewById(R.id.requests_layaout);
         recyclerView=(RecyclerView) findViewById(R.id.courses_recyclerview);
         recyclerView.setLayoutManager(new GridLayoutManager(this,3));
         adapter=new CoursesAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
+        request_recyclerview.setLayoutManager(new LinearLayoutManager(Dashboard.this));
+        request_adapter=new RequestsAdapter(new ArrayList<>());
+        request_recyclerview.setAdapter(request_adapter);
         for (int x=0; x<20; x++){
 
         }
@@ -155,6 +175,65 @@ public class Dashboard extends AppCompatActivity {
                 courseName.setText(itemSetGet.getCourseName());
                 courseDuration.setText("Duration: "+itemSetGet.getCourseDuration());
                 courseDescription.setText(itemSetGet.getCourseDescription());
+            }
+        });
+
+        requestbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                coursesRegistered.setVisibility(View.GONE);
+                requestAvalable.setVisibility(View.VISIBLE);
+                no_request_text.setVisibility(View.GONE);
+                request_progressbar.setVisibility(View.VISIBLE);
+
+                DatabaseReference fetch_requests=FirebaseDatabase.getInstance().getReference()
+                        .child("Requests");
+                fetch_requests.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        requestsSetGetList.clear();
+                        if (snapshot.exists()){
+                            if (snapshot.hasChildren()){
+                                request_progressbar.setVisibility(View.GONE);
+                                for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+                                    String studentName=dataSnapshot.child("Student Name").getValue(String.class);
+                                    String studentID=dataSnapshot.child("StudentID").getValue(String.class);
+                                    String courseName=dataSnapshot.child("Course Name").getValue(String.class);
+                                    String requestDate=dataSnapshot.child("Request Date").getValue(String.class);
+                                    String requestStatus=dataSnapshot.child("Request Status").getValue(String.class);
+                                    String requestID=dataSnapshot.getKey().toString();
+                                    RequestsSetGet requestsSetGet=new RequestsSetGet(requestID+"",studentName+"",studentID+"",courseName+"",requestDate+"",requestStatus+"");
+                                    requestsSetGetList.add(requestsSetGet);
+
+                                }
+                                request_adapter.updateData(requestsSetGetList);
+                                Collections.reverse(requestsSetGetList);
+                                request_adapter.notifyDataSetChanged();
+                            }else {
+                                request_progressbar.setVisibility(View.GONE);
+                                no_request_text.setVisibility(View.VISIBLE);
+                            }
+                        }else{
+                            request_progressbar.setVisibility(View.GONE);
+                            no_request_text.setVisibility(View.VISIBLE);
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
+        homebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                coursesRegistered.setVisibility(View.VISIBLE);
+                requestAvalable.setVisibility(View.GONE);
+
             }
         });
     }

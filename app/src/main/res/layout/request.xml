@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="105dp"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:background="@drawable/card_bg_withborder">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="15dp">
+        <TextView
+            android:id="@+id/req_stdName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name of Student"
+            android:textStyle="bold"
+            android:textAlignment="textStart"
+            android:textSize="20sp"
+            android:textColor="@color/blue" />
+        <TextView
+            android:id="@+id/req_courseName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="COURSE Applied for"
+            android:textStyle="bold"
+            android:textAlignment="textStart"
+            android:textSize="20sp"
+            android:textColor="@color/black" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time : "
+                android:textStyle="bold"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/req_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="933hrs 12/04/2024"
+            android:textStyle="bold"
+                android:layout_weight="1"
+            android:textAlignment="textStart"
+            android:textColor="@color/black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status : "
+                android:textStyle="bold"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/req_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unread"
+            android:textStyle="bold"
+            android:textAlignment="textStart"
+            android:textColor="@color/green" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
