@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,7 +31,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +52,8 @@ public class Dashboard extends AppCompatActivity {
     LinearLayout homebutton,requestbutton,coursesRegistered,requestAvalable;
     ProgressBar request_progressbar;
     TextView no_request_text;
+    Calendar calendar;
+    public static String currentdate;
 
     private List<CoursesSetGet> coursesSetGetList=new ArrayList<>();
     private List<RequestsSetGet> requestsSetGetList=new ArrayList<>();
@@ -57,6 +62,8 @@ public class Dashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        calendar = Calendar.getInstance();
+        currentdate = DateFormat.getInstance().format(calendar.getTime());
         request_progressbar=findViewById(R.id.request_progressbar);
         no_request_text=findViewById(R.id.no_request_text);
         request_recyclerview=findViewById(R.id.requests_recyclerview);
@@ -224,6 +231,72 @@ public class Dashboard extends AppCompatActivity {
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
+                    }
+                });
+            }
+        });
+        request_adapter.setOnItemClickListener(new RequestsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, RequestsSetGet itemSetGet) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Dashboard.this);
+                View popupView = LayoutInflater.from(Dashboard.this).inflate(R.layout.responding_to_request, null);
+                builder.setView(popupView);
+                course_description_dialog = builder.create();
+                course_description_dialog.show();
+                Button Decline=popupView.findViewById(R.id.button_decline);
+                Button Approve=popupView.findViewById(R.id.button_accept);
+                TextView desc=popupView.findViewById(R.id.description);
+                desc.setText(itemSetGet.getStudentName()+" requests to take "+itemSetGet.getCourseName()+".");
+                Approve.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        HashMap<Object,String> hashMap=new HashMap<>();
+                        hashMap.put("Student Name",itemSetGet.getStudentName());
+                        hashMap.put("StudentID",itemSetGet.getStudentID());
+                        hashMap.put("Course Name",itemSetGet.getCourseName());
+                        hashMap.put("Request Date",currentdate+" Hrs");
+                        hashMap.put("Request Status","Accepted");
+                        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference()
+                                .child("Requests").child(itemSetGet.getRequestID());
+                        databaseReference.child("Status").setValue("Accepted").addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                DatabaseReference fetch_requests=FirebaseDatabase.getInstance().getReference()
+                                        .child("Feedback").child(itemSetGet.getStudentID());
+                                fetch_requests.setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(Dashboard.this, "success!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+                Decline.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        HashMap<Object,String> hashMap=new HashMap<>();
+                        hashMap.put("Student Name",itemSetGet.getStudentName());
+                        hashMap.put("StudentID",itemSetGet.getStudentID());
+                        hashMap.put("Course Name",itemSetGet.getCourseName());
+                        hashMap.put("Request Date",currentdate+" Hrs");
+                        hashMap.put("Request Status","Declined");
+                        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference()
+                                .child("Requests").child(itemSetGet.getRequestID());
+                        databaseReference.child("Status").setValue("Declined").addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                DatabaseReference fetch_requests=FirebaseDatabase.getInstance().getReference()
+                                        .child("Feedback").child(itemSetGet.getStudentID());
+                                fetch_requests.setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(Dashboard.this, "success!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
             }
