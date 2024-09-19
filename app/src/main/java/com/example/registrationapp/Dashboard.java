@@ -290,7 +290,7 @@ public class Dashboard extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     DatabaseReference fetch_requests = FirebaseDatabase.getInstance().getReference()
-                                            .child("Feedback").child(itemSetGet.getStudentID()).push();
+                                            .child("Feedback").child(itemSetGet.getStudentID()).child(itemSetGet.getRequestID());
                                     fetch_requests.setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
