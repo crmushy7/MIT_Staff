@@ -49,11 +49,15 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.ViewHo
         holder.bind(item);
 
         // Set the background drawable for receiptStatus TextView based on the status
-//        if (item.getStatus() != null && item.getStatus().equals("Debt")) {
-//            holder.receiptStatus.setBackgroundResource(R.drawable.roundedred);
-//        } else {
-//            holder.receiptStatus.setBackgroundResource(R.drawable.roundedgreen);
-//        }
+        if (item.getRequestStatus() != null && item.getRequestStatus().equals("Declined")) {
+            holder.requestStatus.setBackgroundResource(R.drawable.cardbgred);
+            holder.requestStatus.setTextColor(R.color.white);
+        } else if(item.getRequestStatus() != null && item.getRequestStatus().equals("Accepted")) {
+            holder.requestStatus.setBackgroundResource(R.drawable.cardbggreen);
+            holder.requestStatus.setTextColor(R.color.white);
+        }else {
+            holder.requestStatus.setBackgroundResource(R.drawable.cardbgwhite);
+        }
 
         // Set click listener
         holder.itemView.setOnClickListener(new View.OnClickListener() {

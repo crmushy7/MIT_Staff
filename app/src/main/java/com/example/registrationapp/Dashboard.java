@@ -238,67 +238,73 @@ public class Dashboard extends AppCompatActivity {
         request_adapter.setOnItemClickListener(new RequestsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, RequestsSetGet itemSetGet) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(Dashboard.this);
-                View popupView = LayoutInflater.from(Dashboard.this).inflate(R.layout.responding_to_request, null);
-                builder.setView(popupView);
-                course_description_dialog = builder.create();
-                course_description_dialog.show();
-                Button Decline=popupView.findViewById(R.id.button_decline);
-                Button Approve=popupView.findViewById(R.id.button_accept);
-                TextView desc=popupView.findViewById(R.id.description);
-                desc.setText(itemSetGet.getStudentName()+" requests to take "+itemSetGet.getCourseName()+".");
-                Approve.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        HashMap<Object,String> hashMap=new HashMap<>();
-                        hashMap.put("Student Name",itemSetGet.getStudentName());
-                        hashMap.put("StudentID",itemSetGet.getStudentID());
-                        hashMap.put("Course Name",itemSetGet.getCourseName());
-                        hashMap.put("Request Date",currentdate+" Hrs");
-                        hashMap.put("Request Status","Accepted");
-                        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference()
-                                .child("Requests").child(itemSetGet.getRequestID());
-                        databaseReference.child("Status").setValue("Accepted").addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                DatabaseReference fetch_requests=FirebaseDatabase.getInstance().getReference()
-                                        .child("Feedback").child(itemSetGet.getStudentID());
-                                fetch_requests.setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        Toast.makeText(Dashboard.this, "success!", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-                Decline.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        HashMap<Object,String> hashMap=new HashMap<>();
-                        hashMap.put("Student Name",itemSetGet.getStudentName());
-                        hashMap.put("StudentID",itemSetGet.getStudentID());
-                        hashMap.put("Course Name",itemSetGet.getCourseName());
-                        hashMap.put("Request Date",currentdate+" Hrs");
-                        hashMap.put("Request Status","Declined");
-                        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference()
-                                .child("Requests").child(itemSetGet.getRequestID());
-                        databaseReference.child("Status").setValue("Declined").addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                DatabaseReference fetch_requests=FirebaseDatabase.getInstance().getReference()
-                                        .child("Feedback").child(itemSetGet.getStudentID());
-                                fetch_requests.setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        Toast.makeText(Dashboard.this, "success!", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
+                if(itemSetGet.getRequestStatus().equals("Unread")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Dashboard.this);
+                    View popupView = LayoutInflater.from(Dashboard.this).inflate(R.layout.responding_to_request, null);
+                    builder.setView(popupView);
+                    course_description_dialog = builder.create();
+                    course_description_dialog.show();
+                    Button Decline = popupView.findViewById(R.id.button_decline);
+                    Button Approve = popupView.findViewById(R.id.button_accept);
+                    TextView desc = popupView.findViewById(R.id.description);
+                    desc.setText(itemSetGet.getStudentName() + " requests to take " + itemSetGet.getCourseName() + ".");
+                    Approve.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            HashMap<Object, String> hashMap = new HashMap<>();
+                            hashMap.put("Student Name", itemSetGet.getStudentName());
+                            hashMap.put("StudentID", itemSetGet.getStudentID());
+                            hashMap.put("Course Name", itemSetGet.getCourseName());
+                            hashMap.put("Request Date", currentdate + " Hrs");
+                            hashMap.put("Request Status", "Accepted");
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                                    .child("Requests").child(itemSetGet.getRequestID());
+                            databaseReference.child("Request Status").setValue("Accepted").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    DatabaseReference fetch_requests = FirebaseDatabase.getInstance().getReference()
+                                            .child("Feedback").child(itemSetGet.getStudentID()).child(itemSetGet.getRequestID());
+                                    fetch_requests.setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(Dashboard.this, "success!", Toast.LENGTH_SHORT).show();
+                                            course_description_dialog.dismiss();
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                    Decline.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            HashMap<Object, String> hashMap = new HashMap<>();
+                            hashMap.put("Student Name", itemSetGet.getStudentName());
+                            hashMap.put("StudentID", itemSetGet.getStudentID());
+                            hashMap.put("Course Name", itemSetGet.getCourseName());
+                            hashMap.put("Request Date", currentdate + " Hrs");
+                            hashMap.put("Request Status", "Declined");
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                                    .child("Requests").child(itemSetGet.getRequestID());
+                            databaseReference.child("Request Status").setValue("Declined").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    DatabaseReference fetch_requests = FirebaseDatabase.getInstance().getReference()
+                                            .child("Feedback").child(itemSetGet.getStudentID()).push();
+                                    fetch_requests.setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(Dashboard.this, "success!", Toast.LENGTH_SHORT).show();
+                                            course_description_dialog.dismiss();
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }else{
+                    Toast.makeText(Dashboard.this, "Request already worked on", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         homebutton.setOnClickListener(new View.OnClickListener() {
